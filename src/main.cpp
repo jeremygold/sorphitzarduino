@@ -32,211 +32,151 @@
 
   Tim Barrass 2013, CC by-nc-sa.
 */
-#include <Arduino.h>
-// #include <// USBMIDI.h>
-#include <Bounce2.h>
-#include <ResponsiveAnalogRead.h>
+//#include <ADC.h>  // Teensy 3.1 uncomment this line and install https://github.com/pedvide/ADC
 #include <MozziGuts.h>
-#include <Oscil.h> // oscillator
-#include <LowPassFilter.h>
-#include <tables/cos2048_int8.h> // table for Oscils to play
-#include <Smooth.h>
-#include <AutoMap.h> // maps unpredictable inputs to a range
+#include <Oscil.h>
+#include <tables/cos8192_int8.h>
+#include <mozzi_rand.h>
+#include <mozzi_midi.h>
 
-ResponsiveAnalogRead analogOne(A0, true, 1);
-ResponsiveAnalogRead analogTwo(A1, true, .1);
-ResponsiveAnalogRead analogThree(A2, true, .1);
-ResponsiveAnalogRead analogFour(A3, true, .1);
+#define THERMISTOR_PIN 1
+#define LDR_PIN 2
 
-int faderValue1 = 0;
-int faderValue2 = 0;
-int faderValue3 = 0;
-int faderValue4 = 0;
-// int cc1 = 124;
-// int cc2 = 124;
-// int cc3 = 124;
-// int cc4 = 124;
-// int lastAnalogValue1 = 0;
-// int lastAnalogValue2 = 0;
-// int lastAnalogValue3 = 0;
-// int lastAnalogValue4 = 0;
-// int lastfaderValue1 = faderValue1 = 760;
-// int lastfaderValue2 = faderValue2 = 2600;
-// int lastfaderValue3 = faderValue3 = 2000;
-// int lastfaderValue4 = faderValue4; // = 0;
-// desired carrier frequency max and min, for AutoMap
-const int MIN_CARRIER_FREQ = 22;
-const int MAX_CARRIER_FREQ = 460;
+// harmonics
+Oscil<COS8192_NUM_CELLS, AUDIO_RATE> aCos1(COS8192_DATA);
+Oscil<COS8192_NUM_CELLS, AUDIO_RATE> aCos2(COS8192_DATA);
+Oscil<COS8192_NUM_CELLS, AUDIO_RATE> aCos3(COS8192_DATA);
+Oscil<COS8192_NUM_CELLS, AUDIO_RATE> aCos4(COS8192_DATA);
+Oscil<COS8192_NUM_CELLS, AUDIO_RATE> aCos5(COS8192_DATA);
+Oscil<COS8192_NUM_CELLS, AUDIO_RATE> aCos6(COS8192_DATA);
+Oscil<COS8192_NUM_CELLS, AUDIO_RATE> aCos0(COS8192_DATA);
 
-// desired intensity max and min, for AutoMap, note they're inverted for reverse dynamics
-const int MIN_INTENSITY = 700;
-const int MAX_INTENSITY = 10;
+// duplicates but slightly off frequency for adding to originals
+Oscil<COS8192_NUM_CELLS, AUDIO_RATE> aCos1b(COS8192_DATA);
+Oscil<COS8192_NUM_CELLS, AUDIO_RATE> aCos2b(COS8192_DATA);
+Oscil<COS8192_NUM_CELLS, AUDIO_RATE> aCos3b(COS8192_DATA);
+Oscil<COS8192_NUM_CELLS, AUDIO_RATE> aCos4b(COS8192_DATA);
+Oscil<COS8192_NUM_CELLS, AUDIO_RATE> aCos5b(COS8192_DATA);
+Oscil<COS8192_NUM_CELLS, AUDIO_RATE> aCos6b(COS8192_DATA);
+Oscil<COS8192_NUM_CELLS, AUDIO_RATE> aCos0b(COS8192_DATA);
 
-// desired mod speed max and min, for AutoMap, note they're inverted for reverse dynamics
-const int MIN_MOD_SPEED = 10000;
-const int MAX_MOD_SPEED = 1;
+// base pitch frequencies
+float f0, f1, f2, f3, f4, f5, f6;
 
-AutoMap kMapCarrierFreq(0, 1023, MIN_CARRIER_FREQ, MAX_CARRIER_FREQ);
-AutoMap kMapIntensity(0, 1023, MIN_INTENSITY, MAX_INTENSITY);
-AutoMap kMapModSpeed(0, 1023, MIN_MOD_SPEED, MAX_MOD_SPEED);
+// to map light input to frequency divergence of the b oscillators
+const float DIVERGENCE_SCALE = 0.01; // 0.01*1023 = 10.23 Hz max divergence
 
-const int KNOB_PIN = A0; // set the input for the knob to analog pin 0
-const int LDR1_PIN = A1; // set the analog input for fm_intensity to pin 1
-const int LDR2_PIN = A2; // set the analog input for mod rate to pin 2
-
-Oscil<COS2048_NUM_CELLS, AUDIO_RATE> aCarrier(COS2048_DATA);
-Oscil<COS2048_NUM_CELLS, AUDIO_RATE> aModulator(COS2048_DATA);
-Oscil<COS2048_NUM_CELLS, CONTROL_RATE> kIntensityMod(COS2048_DATA);
-Oscil<COS2048_NUM_CELLS, CONTROL_RATE> kFilterMod(COS2048_DATA);
-LowPassFilter lpf;
-
-int mod_ratio = 5; // brightness (harmonics)
-long fm_intensity; // carries control info from updateControl to updateAudio
-
-// smoothing for intensity to remove clicks on transitions
-float smoothness = 0.95f;
-Smooth<long> aSmoothIntensity(smoothness);
+// to map temperature to base freq drift
+const float OFFSET_SCALE = 0.1; // 0.1*1023 = 102.3 Hz max drift
 
 void setup()
 {
-  //Serial.begin(9600); // for Teensy 3.1, beware printout can cause glitches
-  Serial.begin(115200); // set up the Serial output so we can look at the piezo values // set up the Serial output so we can look at the light level
-  // USBComposite.setProductId(0x0031);
-  // USBMIDI.begin();
-  kFilterMod.setFreq(1.3f);
-  lpf.setResonance(200);
-  startMozzi(); // :))
-}
+  startMozzi();
 
-void updateControl()
-{
-  // // read the knob
-  // faderValue1 = mozziAnalogRead(A0);
-  // cc1 = faderValue1 / 32.3;
-  // if (faderValue1 > 0 && faderValue1 < 145 && (lastfaderValue1 / 32 != faderValue1 / 32))
-  // {
-  //   // USBMIDI.sendControlChange(0, 14, 0);
-  //   lastfaderValue1 = faderValue1;
-  // }
-  // else if (faderValue1 > 6015 && faderValue1 < 6097 && lastfaderValue1 / 32 != faderValue1 / 32)
-  // {
-  //   // USBMIDI.sendControlChange(0, 14, 127);
-  //   lastfaderValue1 = faderValue1;
-  // }
-  // else if (lastfaderValue1 / 32 != faderValue1 / 32)
-  // {
-  //   // USBMIDI.sendControlChange(0, 14, faderValue1 / 32.3);
-  //   lastfaderValue1 = faderValue1;
-  // }
-  // faderValue2 = mozziAnalogRead(A1);
-  // cc1 = faderValue2 / 32.3;
-  // if (faderValue2 > 0 && faderValue2 < 145 && (lastfaderValue2 / 32 != faderValue2 / 32))
-  // {
-  //   // USBMIDI.sendControlChange(0, 15, 0);
-  //   lastfaderValue2 = faderValue2;
-  // }
-  // else if (faderValue2 > 6015 && faderValue2 < 6097 && lastfaderValue2 / 32 != faderValue2 / 32)
-  // {
-  //   // USBMIDI.sendControlChange(0, 15, 127);
-  //   lastfaderValue2 = faderValue2;
-  // }
-  // else if (lastfaderValue2 / 32 != faderValue2 / 32)
-  // {
-  //   // USBMIDI.sendControlChange(0, 15, faderValue2 / 32.3);
-  //   lastfaderValue2 = faderValue2;
-  // }
-  // faderValue3 = mozziAnalogRead(A2);
-  // cc1 = faderValue3 / 32.3;
-  // if (faderValue3 > 0 && faderValue3 < 145 && (lastfaderValue3 / 32 != faderValue3 / 32))
-  // {
-  //   // USBMIDI.sendControlChange(0, 16, 0);
-  //   lastfaderValue3 = faderValue3;
-  // }
-  // else if (faderValue3 > 6015 && faderValue3 < 6097 && lastfaderValue3 / 32 != faderValue3 / 32)
-  // {
-  //   // USBMIDI.sendControlChange(0, 16, 127);
-  //   lastfaderValue1 = faderValue3;
-  // }
-  // else if (lastfaderValue3 / 32 != faderValue3 / 32)
-  // {
-  //   // USBMIDI.sendControlChange(0, 16, faderValue3 / 32.3);
-  //   lastfaderValue3 = faderValue3;
-  // }
-  // faderValue4 = mozziAnalogRead(A3);
-  // cc1 = faderValue4 / 32.3;
-  // if (faderValue4 > 0 && faderValue4 < 145 && (lastfaderValue4 / 32 != faderValue4 / 32))
-  // {
-  //   // USBMIDI.sendControlChange(0, 17, 0);
-  //   lastfaderValue1 = faderValue4;
-  // }
-  // else if (faderValue4 > 6015 && faderValue4 < 6097 && lastfaderValue4 / 32 != faderValue4 / 32)
-  // {
-  //   // USBMIDI.sendControlChange(0, 17, 127);
-  //   lastfaderValue4 = faderValue4;
-  // }
-  // else if (lastfaderValue4 / 32 != faderValue4 / 32)
-  // {
-  //   // USBMIDI.sendControlChange(0, 17, faderValue4 / 32.3);
-  //   lastfaderValue4 = faderValue4;
-  // }
+  // select base frequencies using mtof
+  // C F♯ B♭ E A D the "Promethean chord"
+  f0 = mtof(36.f); // a spare C !
+  f1 = mtof(48.f);
+  f2 = mtof(54.f);
+  f3 = mtof(58.f);
+  f4 = mtof(64.f);
+  f5 = mtof(69.f);
+  f6 = mtof(74.f);
 
-  int knob_value = mozziAnalogRead(KNOB_PIN) / 4; // value is 0-1023
-  // Serial.print("KNOB = ");
-  // Serial.print(knob_value);
-  // Serial.print("\t"); // prints a tab
+  // set Oscils with chosen frequencies
+  aCos0.setFreq(f0);
+  aCos1.setFreq(f1);
+  aCos2.setFreq(f2);
+  aCos3.setFreq(f3);
+  aCos4.setFreq(f4);
+  aCos5.setFreq(f5);
+  aCos6.setFreq(f6);
 
-  // map the knob to carrier frequency
-  int carrier_freq = kMapCarrierFreq(knob_value);
-
-  //calculate the modulation frequency to stay in ratio
-  int mod_freq = carrier_freq * mod_ratio;
-
-  // set the FM oscillator frequencies
-  aCarrier.setFreq(carrier_freq);
-  aModulator.setFreq(mod_freq);
-
-  // read the light dependent resistor on the width Analog input pin
-  int LDR1_value = mozziAnalogRead(LDR1_PIN) / 1; // value is 0-1023
-  // print the value to the Serial monitor for debugging
-  // Serial.print("LDR1 = ");
-  // Serial.print(LDR1_value);
-  // Serial.print("\t"); // prints a tab
-
-  int LDR1_calibrated = kMapIntensity(LDR1_value);
-  Serial.print("LDR1_calibrated = ");
-  Serial.print(LDR1_calibrated);
-  Serial.print("\t"); // prints a tab
-
-  // calculate the fm_intensity
-  fm_intensity = ((long)LDR1_calibrated * (kIntensityMod.next() + 128)) >> 8; // shift back to range after 8 bit multiply
-  // Serial.print("fm_intensity = ");
-  // Serial.print(fm_intensity);
-  // Serial.print("\t"); // prints a tab
-
-  // read the light dependent resistor on the speed Analog input pin
-  int LDR2_value = mozziAnalogRead(LDR2_PIN) / 1; // value is 0-1023
-  // Serial.print("LDR2 = ");
-  // Serial.print(LDR2_value);
-  // Serial.print("\t"); // prints a tab
-
-  // use a float here for low frequencies
-  float mod_speed = (float)kMapModSpeed(LDR2_value) / 1000;
-  Serial.print("   mod_speed = ");
-  Serial.print(mod_speed);
-
-  int slider3 = mozziAnalogRead(A3) / 4;
-  kIntensityMod.setFreq(mod_speed);
-  lpf.setCutoffFreq(slider3);
-  Serial.println(); // finally, print a carraige return for the next line of debugging info
-}
-
-int updateAudio()
-{
-  long modulation = lpf.next(aSmoothIntensity.next(fm_intensity) * aModulator.next());
-  return aCarrier.phMod(modulation);
+  // set frequencies of duplicate oscillators
+  aCos6b.setFreq(f6);
+  aCos0b.setFreq(f0);
+  aCos1b.setFreq(f1);
+  aCos2b.setFreq(f2);
+  aCos3b.setFreq(f3);
+  aCos4b.setFreq(f4);
+  aCos5b.setFreq(f5);
 }
 
 void loop()
 {
   audioHook();
+}
+
+void updateControl()
+{
+  // read analog inputs
+  int temperature = mozziAnalogRead(THERMISTOR_PIN); // not calibrated to degrees!
+  int light_input = mozziAnalogRead(LDR_PIN);
+
+  float base_freq_offset = OFFSET_SCALE * temperature;
+  float divergence = DIVERGENCE_SCALE * light_input;
+
+  float freq;
+
+  // change frequencies of the oscillators, randomly choosing one pair each time to change
+  switch (rand(7))
+  {
+
+  case 0:
+    freq = f0 + base_freq_offset;
+    aCos0.setFreq(freq);
+    aCos0b.setFreq(freq + divergence);
+    break;
+
+  case 1:
+    freq = f1 + base_freq_offset;
+    aCos1.setFreq(freq);
+    aCos1b.setFreq(freq + divergence);
+    break;
+
+  case 2:
+    freq = f2 + base_freq_offset;
+    aCos2.setFreq(freq);
+    aCos2b.setFreq(freq + divergence);
+    break;
+
+  case 3:
+    freq = f3 + base_freq_offset;
+    aCos3.setFreq(freq);
+    aCos3b.setFreq(freq + divergence);
+    break;
+
+  case 4:
+    freq = f4 + base_freq_offset;
+    aCos4.setFreq(freq);
+    aCos4b.setFreq(freq + divergence);
+    break;
+
+  case 5:
+    freq = f5 + base_freq_offset;
+    aCos5.setFreq(freq);
+    aCos5b.setFreq(freq + divergence);
+    break;
+
+  case 6:
+    freq = f6 + base_freq_offset;
+    aCos6.setFreq(freq);
+    aCos6b.setFreq(freq + divergence);
+    break;
+  }
+}
+
+int updateAudio()
+{
+
+  int asig =
+      aCos0.next() + aCos0b.next() +
+      aCos1.next() + aCos1b.next() +
+      aCos2.next() + aCos2b.next() +
+      aCos3.next() + aCos3b.next() +
+      aCos4.next() + aCos4b.next() +
+      aCos5.next() + aCos5b.next() +
+      aCos6.next() + aCos6b.next();
+
+  return asig >> 3;
 }
