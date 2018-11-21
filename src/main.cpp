@@ -39,8 +39,8 @@
 #include <mozzi_rand.h>
 #include <mozzi_midi.h>
 
-#define THERMISTOR_PIN 1
-#define LDR_PIN 2
+#define FREQ_OFFSET_PIN 0
+#define DIVERGENCE_PIN 1
 
 // harmonics
 Oscil<COS8192_NUM_CELLS, AUDIO_RATE> aCos1(COS8192_DATA);
@@ -66,7 +66,7 @@ float f0, f1, f2, f3, f4, f5, f6;
 // to map light input to frequency divergence of the b oscillators
 const float DIVERGENCE_SCALE = 0.01; // 0.01*1023 = 10.23 Hz max divergence
 
-// to map temperature to base freq drift
+// to map freqOffset to base freq drift
 const float OFFSET_SCALE = 0.1; // 0.1*1023 = 102.3 Hz max drift
 
 void setup()
@@ -110,11 +110,11 @@ void loop()
 void updateControl()
 {
   // read analog inputs
-  int temperature = mozziAnalogRead(THERMISTOR_PIN); // not calibrated to degrees!
-  int light_input = mozziAnalogRead(LDR_PIN);
+  int freqOffset = mozziAnalogRead(FREQ_OFFSET_PIN); // not calibrated to degrees!
+  int divergenceSetting = mozziAnalogRead(DIVERGENCE_PIN);
 
-  float base_freq_offset = OFFSET_SCALE * temperature;
-  float divergence = DIVERGENCE_SCALE * light_input;
+  float base_freq_offset = OFFSET_SCALE * freqOffset;
+  float divergence = DIVERGENCE_SCALE * divergenceSetting;
 
   float freq;
 
