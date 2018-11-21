@@ -41,6 +41,8 @@
 
 #define FREQ_OFFSET_PIN 0
 #define DIVERGENCE_PIN 1
+#define FREQ_PIN 2
+#define VOLUME_PIN 3
 
 // harmonics
 Oscil<COS8192_NUM_CELLS, AUDIO_RATE> aCos1(COS8192_DATA);
@@ -68,20 +70,19 @@ const float DIVERGENCE_SCALE = 0.01; // 0.01*1023 = 10.23 Hz max divergence
 
 // to map freqOffset to base freq drift
 const float OFFSET_SCALE = 0.1; // 0.1*1023 = 102.3 Hz max drift
+const float FREQ_SCALE = 0.5;   // 0.5 * 1023 = 501.15 Hz freq adjustment
 
-void setup()
+void setFrequencies(float baseFreq)
 {
-  startMozzi();
-
   // select base frequencies using mtof
   // C F♯ B♭ E A D the "Promethean chord"
-  f0 = mtof(36.f); // a spare C !
-  f1 = mtof(48.f);
-  f2 = mtof(54.f);
-  f3 = mtof(58.f);
-  f4 = mtof(64.f);
-  f5 = mtof(69.f);
-  f6 = mtof(74.f);
+  f0 = baseFreq; // a spare C !
+  f1 = f0 * 1.33333333333;
+  f2 = f0 * 1.5;
+  f3 = f0 * 1.61111111111;
+  f4 = f0 * 1.77777777778;
+  f5 = f0 * 1.91666666667;
+  f6 = f0 * 2.05555555556;
 
   // set Oscils with chosen frequencies
   aCos0.setFreq(f0);
@@ -102,6 +103,12 @@ void setup()
   aCos5b.setFreq(f5);
 }
 
+void setup()
+{
+  startMozzi();
+  setFrequencies(440.0);
+}
+
 void loop()
 {
   audioHook();
@@ -115,6 +122,9 @@ void updateControl()
 
   float base_freq_offset = OFFSET_SCALE * freqOffset;
   float divergence = DIVERGENCE_SCALE * divergenceSetting;
+
+  int baseFreq = mozziAnalogRead(FREQ_PIN) * FREQ_SCALE;
+  setFrequencies(440.0 + baseFreq);
 
   float freq;
 
