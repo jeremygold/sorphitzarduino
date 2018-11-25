@@ -1,0 +1,4 @@
+(fp_lib_table
+  (lib (name arduino_micro_shield)(type KiCad)(uri /home/jeremy/git/arduino_micro_shield/arduino_micro_shield.pretty)(options "")(descr ""))
+  (lib (name Bourne_PTA6043)(type KiCad)(uri "$(KIPRJMOD)/Bourne_PTA6043.pretty")(options "")(descr ""))
+)

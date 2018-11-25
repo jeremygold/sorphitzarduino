@@ -1,0 +1,392 @@
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:arduino_micro_shield
+LIBS:Bourne_PTA6043
+LIBS:sorphitzarduino-cache
+EELAYER 25 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title "Sorphitzarduino"
+Date "2018-11-25"
+Rev "1"
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L GND #PWR01
+U 1 1 5BF9F106
+P 7100 4950
+F 0 "#PWR01" H 7100 4700 50  0001 C CNN
+F 1 "GND" H 7100 4800 50  0000 C CNN
+F 2 "" H 7100 4950 50  0000 C CNN
+F 3 "" H 7100 4950 50  0000 C CNN
+	1    7100 4950
+	1    0    0    -1  
+$EndComp
+$Comp
+L ARDUINO_MICRO_SHIELD U1
+U 1 1 5BF9F1BE
+P 5500 2900
+F 0 "U1" V 7250 3300 60  0000 C CNN
+F 1 "ARDUINO_MICRO_SHIELD" H 6350 3500 60  0000 C CNN
+F 2 "arduino_micro_shield:ARDUINO_MICRO_SHIELD" H 5900 2850 60  0001 C CNN
+F 3 "" H 5900 2850 60  0000 C CNN
+	1    5500 2900
+	0    1    1    0   
+$EndComp
+$Comp
+L CONN_01X02 J1
+U 1 1 5BF9F43C
+P 8150 3200
+F 0 "J1" H 8150 3350 50  0000 C CNN
+F 1 "9V_BATT" V 8250 3200 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x02" H 8150 3200 50  0001 C CNN
+F 3 "" H 8150 3200 50  0000 C CNN
+	1    8150 3200
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR02
+U 1 1 5BF9F4FC
+P 7100 3350
+F 0 "#PWR02" H 7100 3100 50  0001 C CNN
+F 1 "GND" H 7100 3200 50  0000 C CNN
+F 2 "" H 7100 3350 50  0000 C CNN
+F 3 "" H 7100 3350 50  0000 C CNN
+	1    7100 3350
+	1    0    0    -1  
+$EndComp
+$Comp
+L +5V #PWR03
+U 1 1 5BF9F94F
+P 6850 4800
+F 0 "#PWR03" H 6850 4650 50  0001 C CNN
+F 1 "+5V" H 6850 4940 50  0000 C CNN
+F 2 "" H 6850 4800 50  0000 C CNN
+F 3 "" H 6850 4800 50  0000 C CNN
+	1    6850 4800
+	1    0    0    -1  
+$EndComp
+$Comp
+L +5V #PWR04
+U 1 1 5BF9F98F
+P 6850 3450
+F 0 "#PWR04" H 6850 3300 50  0001 C CNN
+F 1 "+5V" H 6850 3590 50  0000 C CNN
+F 2 "" H 6850 3450 50  0000 C CNN
+F 3 "" H 6850 3450 50  0000 C CNN
+	1    6850 3450
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6650 3450 6850 3450
+Wire Wire Line
+	7950 3150 7550 3150
+Wire Wire Line
+	7050 2800 7400 2800
+Wire Wire Line
+	6650 3250 7950 3250
+Wire Wire Line
+	7100 3350 7100 3250
+Connection ~ 7100 3250
+Wire Wire Line
+	6850 4800 7050 4800
+$Comp
+L CONN_01X02 J2
+U 1 1 5BF9FCCD
+P 8150 2550
+F 0 "J2" H 8150 2700 50  0000 C CNN
+F 1 "SWITCH" V 8250 2550 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x02" H 8150 2550 50  0001 C CNN
+F 3 "" H 8150 2550 50  0000 C CNN
+	1    8150 2550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7950 2600 7550 2600
+Wire Wire Line
+	7550 2600 7550 3150
+Connection ~ 7550 3150
+Wire Wire Line
+	7950 2500 7400 2500
+Wire Wire Line
+	7400 2500 7400 2800
+Connection ~ 7400 2800
+Wire Wire Line
+	7050 4350 7050 4900
+Wire Wire Line
+	7050 4350 6650 4350
+Connection ~ 7050 4800
+Wire Wire Line
+	7050 2800 7050 3150
+Wire Wire Line
+	7050 3150 6650 3150
+$Comp
+L CP C1
+U 1 1 5BFA0508
+P 7250 3000
+F 0 "C1" H 7275 3100 50  0000 L CNN
+F 1 "10uF" H 7275 2900 50  0000 L CNN
+F 2 "Capacitors_ThroughHole:C_Radial_D5_L11_P2" H 7288 2850 50  0001 C CNN
+F 3 "" H 7250 3000 50  0000 C CNN
+	1    7250 3000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7250 2850 7250 2800
+Connection ~ 7250 2800
+Wire Wire Line
+	7250 3150 7250 3250
+Connection ~ 7250 3250
+$Comp
+L R R1
+U 1 1 5BFA081C
+P 4500 4250
+F 0 "R1" V 4580 4250 50  0000 C CNN
+F 1 "270" V 4500 4250 50  0000 C CNN
+F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 4430 4250 50  0001 C CNN
+F 3 "" H 4500 4250 50  0000 C CNN
+	1    4500 4250
+	0    1    1    0   
+$EndComp
+$Comp
+L C C2
+U 1 1 5BFA0990
+P 4050 4500
+F 0 "C2" H 4075 4600 50  0000 L CNN
+F 1 "100n" H 4075 4400 50  0000 L CNN
+F 2 "Capacitors_ThroughHole:C_Disc_D6_P5" H 4088 4350 50  0001 C CNN
+F 3 "" H 4050 4500 50  0000 C CNN
+	1    4050 4500
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR05
+U 1 1 5BFA09E9
+P 4050 4850
+F 0 "#PWR05" H 4050 4600 50  0001 C CNN
+F 1 "GND" H 4050 4700 50  0000 C CNN
+F 2 "" H 4050 4850 50  0000 C CNN
+F 3 "" H 4050 4850 50  0000 C CNN
+	1    4050 4850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4050 4650 4050 4850
+Wire Wire Line
+	4350 4250 4050 4250
+Wire Wire Line
+	4050 4200 4050 4350
+Wire Wire Line
+	4650 4250 5300 4250
+$Comp
+L CONN_01X03 J3
+U 1 1 5BFA0BF7
+P 3050 4300
+F 0 "J3" H 3050 4500 50  0000 C CNN
+F 1 "AUDIO_JACK" V 3150 4300 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x03" H 3050 4300 50  0001 C CNN
+F 3 "" H 3050 4300 50  0000 C CNN
+	1    3050 4300
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	3250 4200 4050 4200
+Connection ~ 4050 4250
+Wire Wire Line
+	4050 4300 3250 4300
+Connection ~ 4050 4300
+Wire Wire Line
+	3250 4400 3600 4400
+Wire Wire Line
+	3600 4400 3600 4800
+Wire Wire Line
+	3600 4800 4050 4800
+Connection ~ 4050 4800
+$Comp
+L LED D1
+U 1 1 5BFA0F30
+P 3800 2800
+F 0 "D1" H 3800 2900 50  0000 C CNN
+F 1 "LED" H 3800 2700 50  0000 C CNN
+F 2 "LEDs:LED-5MM" H 3800 2800 50  0001 C CNN
+F 3 "" H 3800 2800 50  0000 C CNN
+	1    3800 2800
+	0    -1   -1   0   
+$EndComp
+$Comp
+L +5V #PWR06
+U 1 1 5BFA10BA
+P 3800 2450
+F 0 "#PWR06" H 3800 2300 50  0001 C CNN
+F 1 "+5V" H 3800 2590 50  0000 C CNN
+F 2 "" H 3800 2450 50  0000 C CNN
+F 3 "" H 3800 2450 50  0000 C CNN
+	1    3800 2450
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR07
+U 1 1 5BFA10FE
+P 3800 3500
+F 0 "#PWR07" H 3800 3250 50  0001 C CNN
+F 1 "GND" H 3800 3350 50  0000 C CNN
+F 2 "" H 3800 3500 50  0000 C CNN
+F 3 "" H 3800 3500 50  0000 C CNN
+	1    3800 3500
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R2
+U 1 1 5BFA11AE
+P 3800 3250
+F 0 "R2" V 3880 3250 50  0000 C CNN
+F 1 "290" V 3800 3250 50  0000 C CNN
+F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 3730 3250 50  0001 C CNN
+F 3 "" H 3800 3250 50  0000 C CNN
+	1    3800 3250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3800 2450 3800 2600
+Wire Wire Line
+	3800 3000 3800 3100
+Wire Wire Line
+	3800 3400 3800 3500
+Text Notes 3600 3850 0    60   ~ 0
+POWER_LED
+$Comp
+L Bourne_Slider RV1
+U 1 1 5BFA5669
+P 7750 4600
+F 0 "RV1" H 7750 4400 60  0000 C CNN
+F 1 "10k" H 7750 4500 60  0000 C CNN
+F 2 "Bourne_PTA6043:Bourne PTA6043" V 7700 4450 60  0001 C CNN
+F 3 "" V 7700 4450 60  0000 C CNN
+	1    7750 4600
+	1    0    0    -1  
+$EndComp
+$Comp
+L Bourne_Slider RV2
+U 1 1 5BFA57ED
+P 8450 4600
+F 0 "RV2" H 8450 4400 60  0000 C CNN
+F 1 "10k" H 8450 4500 60  0000 C CNN
+F 2 "Bourne_PTA6043:Bourne PTA6043" V 8400 4450 60  0001 C CNN
+F 3 "" V 8400 4450 60  0000 C CNN
+	1    8450 4600
+	1    0    0    -1  
+$EndComp
+$Comp
+L Bourne_Slider RV3
+U 1 1 5BFA5836
+P 9150 4600
+F 0 "RV3" H 9150 4400 60  0000 C CNN
+F 1 "10k" H 9150 4500 60  0000 C CNN
+F 2 "Bourne_PTA6043:Bourne PTA6043" V 9100 4450 60  0001 C CNN
+F 3 "" V 9100 4450 60  0000 C CNN
+	1    9150 4600
+	1    0    0    -1  
+$EndComp
+$Comp
+L Bourne_Slider RV4
+U 1 1 5BFA58DD
+P 9850 4600
+F 0 "RV4" H 9850 4400 60  0000 C CNN
+F 1 "10k" H 9850 4500 60  0000 C CNN
+F 2 "Bourne_PTA6043:Bourne PTA6043" V 9800 4450 60  0001 C CNN
+F 3 "" V 9800 4450 60  0000 C CNN
+	1    9850 4600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7750 4350 7750 4250
+Wire Wire Line
+	7750 4250 6650 4250
+Wire Wire Line
+	8450 4350 8450 4150
+Wire Wire Line
+	8450 4150 6650 4150
+Wire Wire Line
+	9150 4350 9150 4050
+Wire Wire Line
+	9150 4050 6650 4050
+Wire Wire Line
+	9850 4350 9850 3950
+Wire Wire Line
+	9850 3950 6650 3950
+Wire Wire Line
+	7100 4950 10100 4950
+Wire Wire Line
+	10100 4950 10100 4600
+Wire Wire Line
+	9400 4600 9400 4950
+Connection ~ 9400 4950
+Wire Wire Line
+	8700 4600 8700 4950
+Connection ~ 8700 4950
+Wire Wire Line
+	8000 4600 8000 4950
+Connection ~ 8000 4950
+Wire Wire Line
+	7050 4900 9600 4900
+Wire Wire Line
+	9600 4900 9600 4600
+Wire Wire Line
+	8900 4600 8900 4900
+Connection ~ 8900 4900
+Wire Wire Line
+	8200 4600 8200 4900
+Connection ~ 8200 4900
+Wire Wire Line
+	7500 4600 7500 4900
+Connection ~ 7500 4900
+$Comp
+L GND #PWR08
+U 1 1 5BFA60DB
+P 4950 3500
+F 0 "#PWR08" H 4950 3250 50  0001 C CNN
+F 1 "GND" H 4950 3350 50  0000 C CNN
+F 2 "" H 4950 3500 50  0000 C CNN
+F 3 "" H 4950 3500 50  0000 C CNN
+	1    4950 3500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5300 3450 4950 3450
+Wire Wire Line
+	4950 3450 4950 3500
+$EndSCHEMATC
