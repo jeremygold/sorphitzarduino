@@ -8,6 +8,10 @@
     "terminal.integrated.env.osx": {
       "PATH": "/Users/jeremy/.platformio/penv/bin:/Users/jeremy/.platformio/penv:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin",
       "PLATFORMIO_CALLER": "vscode"
+    },
+    "terminal.integrated.env.linux": {
+      "PATH": "/home/jeremy/.platformio/penv/bin:/home/jeremy/.platformio/penv:/home/jeremy/bin:/home/jeremy/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+      "PLATFORMIO_CALLER": "vscode"
     }
   }
 }

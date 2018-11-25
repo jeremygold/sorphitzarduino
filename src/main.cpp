@@ -33,6 +33,7 @@
   Tim Barrass 2013, CC by-nc-sa.
 */
 //#include <ADC.h>  // Teensy 3.1 uncomment this line and install https://github.com/pedvide/ADC
+#include "mozzi_config.h"
 #include <MozziGuts.h>
 #include <Oscil.h>
 #include <tables/cos8192_int8.h>
