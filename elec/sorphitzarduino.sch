@@ -1,37 +1,6 @@
-EESchema Schematic File Version 2
-LIBS:power
-LIBS:device
-LIBS:transistors
-LIBS:conn
-LIBS:linear
-LIBS:regul
-LIBS:74xx
-LIBS:cmos4000
-LIBS:adc-dac
-LIBS:memory
-LIBS:xilinx
-LIBS:microcontrollers
-LIBS:dsp
-LIBS:microchip
-LIBS:analog_switches
-LIBS:motorola
-LIBS:texas
-LIBS:intel
-LIBS:audio
-LIBS:interface
-LIBS:digital-audio
-LIBS:philips
-LIBS:display
-LIBS:cypress
-LIBS:siliconi
-LIBS:opto
-LIBS:atmel
-LIBS:contrib
-LIBS:valves
-LIBS:arduino_micro_shield
-LIBS:Bourne_PTA6043
+EESchema Schematic File Version 4
 LIBS:sorphitzarduino-cache
-EELAYER 25 0
+EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -46,7 +15,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L GND #PWR01
+L power:GND #PWR01
 U 1 1 5BF9F106
 P 7100 4950
 F 0 "#PWR01" H 7100 4700 50  0001 C CNN
@@ -57,7 +26,7 @@ F 3 "" H 7100 4950 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L ARDUINO_MICRO_SHIELD U1
+L sorphitzarduino-rescue:ARDUINO_MICRO_SHIELD U1
 U 1 1 5BF9F1BE
 P 5500 2900
 F 0 "U1" V 7250 3300 60  0000 C CNN
@@ -68,7 +37,7 @@ F 3 "" H 5900 2850 60  0000 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L CONN_01X02 J1
+L sorphitzarduino-rescue:CONN_01X02 J1
 U 1 1 5BF9F43C
 P 8150 3200
 F 0 "J1" H 8150 3350 50  0000 C CNN
@@ -79,7 +48,7 @@ F 3 "" H 8150 3200 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR02
+L power:GND #PWR02
 U 1 1 5BF9F4FC
 P 7100 3350
 F 0 "#PWR02" H 7100 3100 50  0001 C CNN
@@ -90,7 +59,7 @@ F 3 "" H 7100 3350 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L +5V #PWR03
+L power:+5V #PWR03
 U 1 1 5BF9F94F
 P 6850 4800
 F 0 "#PWR03" H 6850 4650 50  0001 C CNN
@@ -101,7 +70,7 @@ F 3 "" H 6850 4800 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L +5V #PWR04
+L power:+5V #PWR04
 U 1 1 5BF9F98F
 P 6850 3450
 F 0 "#PWR04" H 6850 3300 50  0001 C CNN
@@ -116,16 +85,16 @@ Wire Wire Line
 Wire Wire Line
 	7950 3150 7550 3150
 Wire Wire Line
-	7050 2800 7400 2800
+	7050 2800 7250 2800
 Wire Wire Line
-	6650 3250 7950 3250
+	6650 3250 7100 3250
 Wire Wire Line
 	7100 3350 7100 3250
 Connection ~ 7100 3250
 Wire Wire Line
 	6850 4800 7050 4800
 $Comp
-L CONN_01X02 J2
+L sorphitzarduino-rescue:CONN_01X02 J2
 U 1 1 5BF9FCCD
 P 8150 2550
 F 0 "J2" H 8150 2700 50  0000 C CNN
@@ -139,14 +108,12 @@ Wire Wire Line
 	7950 2600 7550 2600
 Wire Wire Line
 	7550 2600 7550 3150
-Connection ~ 7550 3150
 Wire Wire Line
 	7950 2500 7400 2500
 Wire Wire Line
 	7400 2500 7400 2800
-Connection ~ 7400 2800
 Wire Wire Line
-	7050 4350 7050 4900
+	7050 4350 7050 4800
 Wire Wire Line
 	7050 4350 6650 4350
 Connection ~ 7050 4800
@@ -155,7 +122,7 @@ Wire Wire Line
 Wire Wire Line
 	7050 3150 6650 3150
 $Comp
-L CP C1
+L Bourne_PTA6043:CP C1
 U 1 1 5BFA0508
 P 7250 3000
 F 0 "C1" H 7275 3100 50  0000 L CNN
@@ -172,7 +139,7 @@ Wire Wire Line
 	7250 3150 7250 3250
 Connection ~ 7250 3250
 $Comp
-L C C2
+L Bourne_PTA6043:C C2
 U 1 1 5BFA0990
 P 4050 4600
 F 0 "C2" H 4075 4700 50  0000 L CNN
@@ -183,7 +150,7 @@ F 3 "" H 4050 4600 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR05
+L power:GND #PWR05
 U 1 1 5BFA09E9
 P 4050 4850
 F 0 "#PWR05" H 4050 4600 50  0001 C CNN
@@ -194,7 +161,7 @@ F 3 "" H 4050 4850 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CONN_01X03 J3
+L sorphitzarduino-rescue:CONN_01X03 J3
 U 1 1 5BFA0BF7
 P 3050 4350
 F 0 "J3" H 3050 4550 50  0000 C CNN
@@ -205,7 +172,7 @@ F 3 "" H 3050 4350 50  0000 C CNN
 	-1   0    0    1   
 $EndComp
 Wire Wire Line
-	3850 4200 4350 4200
+	3850 4200 4050 4200
 Wire Wire Line
 	3250 4450 3850 4450
 Wire Wire Line
@@ -214,7 +181,7 @@ Wire Wire Line
 	3850 4800 4050 4800
 Connection ~ 4050 4800
 $Comp
-L LED D1
+L Bourne_PTA6043:LED D1
 U 1 1 5BFA0F30
 P 4900 5150
 F 0 "D1" H 4900 5250 50  0000 C CNN
@@ -225,7 +192,7 @@ F 3 "" H 4900 5150 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L GND #PWR06
+L power:GND #PWR06
 U 1 1 5BFA10FE
 P 4900 5850
 F 0 "#PWR06" H 4900 5600 50  0001 C CNN
@@ -236,7 +203,7 @@ F 3 "" H 4900 5850 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R4
+L Bourne_PTA6043:R R4
 U 1 1 5BFA11AE
 P 4900 5600
 F 0 "R4" V 4980 5600 50  0000 C CNN
@@ -253,7 +220,7 @@ Wire Wire Line
 Text Notes 4700 6200 0    60   ~ 0
 POWER_LED
 $Comp
-L Bourne_Slider RV1
+L Bourne_PTA6043:Bourne_Slider RV1
 U 1 1 5BFA5669
 P 7750 4600
 F 0 "RV1" H 7750 4400 60  0000 C CNN
@@ -264,7 +231,7 @@ F 3 "" V 7700 4450 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Bourne_Slider RV2
+L Bourne_PTA6043:Bourne_Slider RV2
 U 1 1 5BFA57ED
 P 8450 4600
 F 0 "RV2" H 8450 4400 60  0000 C CNN
@@ -275,7 +242,7 @@ F 3 "" V 8400 4450 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Bourne_Slider RV3
+L Bourne_PTA6043:Bourne_Slider RV3
 U 1 1 5BFA5836
 P 9150 4600
 F 0 "RV3" H 9150 4400 60  0000 C CNN
@@ -286,7 +253,7 @@ F 3 "" V 9100 4450 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Bourne_Slider RV4
+L Bourne_PTA6043:Bourne_Slider RV4
 U 1 1 5BFA58DD
 P 9850 4600
 F 0 "RV4" H 9850 4400 60  0000 C CNN
@@ -313,7 +280,7 @@ Wire Wire Line
 Wire Wire Line
 	9850 3950 6650 3950
 Wire Wire Line
-	7100 4950 10100 4950
+	7100 4950 8000 4950
 Wire Wire Line
 	10100 4950 10100 4600
 Wire Wire Line
@@ -326,7 +293,7 @@ Wire Wire Line
 	8000 4600 8000 4950
 Connection ~ 8000 4950
 Wire Wire Line
-	7050 4900 9600 4900
+	7050 4900 7500 4900
 Wire Wire Line
 	9600 4900 9600 4600
 Wire Wire Line
@@ -339,7 +306,7 @@ Wire Wire Line
 	7500 4600 7500 4900
 Connection ~ 7500 4900
 $Comp
-L GND #PWR07
+L power:GND #PWR07
 U 1 1 5BFA60DB
 P 4950 3500
 F 0 "#PWR07" H 4950 3250 50  0001 C CNN
@@ -358,7 +325,7 @@ Wire Wire Line
 Wire Wire Line
 	4900 4450 4900 4950
 $Comp
-L R R1
+L Bourne_PTA6043:R R1
 U 1 1 5BFA081C
 P 4500 4200
 F 0 "R1" V 4580 4200 50  0000 C CNN
@@ -369,7 +336,7 @@ F 3 "" H 4500 4200 50  0000 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L R R2
+L Bourne_PTA6043:R R2
 U 1 1 5C037AD8
 P 4500 4350
 F 0 "R2" V 4580 4350 50  0000 C CNN
@@ -380,7 +347,7 @@ F 3 "" H 4500 4350 50  0000 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L R R3
+L Bourne_PTA6043:R R3
 U 1 1 5C037B46
 P 4500 4500
 F 0 "R3" V 4580 4500 50  0000 C CNN
@@ -395,11 +362,11 @@ Wire Wire Line
 Wire Wire Line
 	4650 4350 4650 4500
 Wire Wire Line
-	4050 4200 4050 4450
+	4050 4200 4050 4350
 Wire Wire Line
-	4050 4750 4050 4850
+	4050 4750 4050 4800
 Wire Wire Line
-	3250 4350 4350 4350
+	3250 4350 4050 4350
 Wire Wire Line
 	4350 4350 4350 4500
 Wire Wire Line
@@ -414,4 +381,32 @@ Wire Wire Line
 	3250 4250 3850 4250
 Wire Wire Line
 	3850 4250 3850 4200
+Wire Wire Line
+	7100 3250 7250 3250
+Wire Wire Line
+	7050 4800 7050 4900
+Wire Wire Line
+	7250 2800 7400 2800
+Wire Wire Line
+	7250 3250 7950 3250
+Wire Wire Line
+	4050 4800 4050 4850
+Wire Wire Line
+	9400 4950 10100 4950
+Wire Wire Line
+	8700 4950 9400 4950
+Wire Wire Line
+	8000 4950 8700 4950
+Wire Wire Line
+	8900 4900 9600 4900
+Wire Wire Line
+	8200 4900 8900 4900
+Wire Wire Line
+	7500 4900 8200 4900
+Wire Wire Line
+	4050 4200 4350 4200
+Wire Wire Line
+	4050 4350 4050 4450
+Wire Wire Line
+	4050 4350 4350 4350
 $EndSCHEMATC
