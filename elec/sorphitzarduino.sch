@@ -26,7 +26,7 @@ F 3 "" H 7100 4950 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L sorphitzarduino-rescue:ARDUINO_MICRO_SHIELD U1
+L sorphitzarduino-rescue:ARDUINO_MICRO_SHIELD-sorphitzarduino-rescue U1
 U 1 1 5BF9F1BE
 P 5500 2900
 F 0 "U1" V 7250 3300 60  0000 C CNN
@@ -37,7 +37,7 @@ F 3 "" H 5900 2850 60  0000 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L sorphitzarduino-rescue:CONN_01X02 J1
+L sorphitzarduino-rescue:CONN_01X02-sorphitzarduino-rescue J1
 U 1 1 5BF9F43C
 P 8150 3200
 F 0 "J1" H 8150 3350 50  0000 C CNN
@@ -94,7 +94,7 @@ Connection ~ 7100 3250
 Wire Wire Line
 	6850 4800 7050 4800
 $Comp
-L sorphitzarduino-rescue:CONN_01X02 J2
+L sorphitzarduino-rescue:CONN_01X02-sorphitzarduino-rescue J2
 U 1 1 5BF9FCCD
 P 8150 2550
 F 0 "J2" H 8150 2700 50  0000 C CNN
@@ -122,7 +122,7 @@ Wire Wire Line
 Wire Wire Line
 	7050 3150 6650 3150
 $Comp
-L Bourne_PTA6043:CP C1
+L sorphitzarduino-rescue:CP-Bourne_PTA6043 C1
 U 1 1 5BFA0508
 P 7250 3000
 F 0 "C1" H 7275 3100 50  0000 L CNN
@@ -139,7 +139,7 @@ Wire Wire Line
 	7250 3150 7250 3250
 Connection ~ 7250 3250
 $Comp
-L Bourne_PTA6043:C C2
+L sorphitzarduino-rescue:C-Bourne_PTA6043 C2
 U 1 1 5BFA0990
 P 4050 4600
 F 0 "C2" H 4075 4700 50  0000 L CNN
@@ -161,7 +161,7 @@ F 3 "" H 4050 4850 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L sorphitzarduino-rescue:CONN_01X03 J3
+L sorphitzarduino-rescue:CONN_01X03-sorphitzarduino-rescue J3
 U 1 1 5BFA0BF7
 P 3050 4350
 F 0 "J3" H 3050 4550 50  0000 C CNN
@@ -181,7 +181,7 @@ Wire Wire Line
 	3850 4800 4050 4800
 Connection ~ 4050 4800
 $Comp
-L Bourne_PTA6043:LED D1
+L sorphitzarduino-rescue:LED-Bourne_PTA6043 D1
 U 1 1 5BFA0F30
 P 4900 5150
 F 0 "D1" H 4900 5250 50  0000 C CNN
@@ -203,7 +203,7 @@ F 3 "" H 4900 5850 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Bourne_PTA6043:R R4
+L sorphitzarduino-rescue:R-Bourne_PTA6043 R4
 U 1 1 5BFA11AE
 P 4900 5600
 F 0 "R4" V 4980 5600 50  0000 C CNN
@@ -220,7 +220,7 @@ Wire Wire Line
 Text Notes 4700 6200 0    60   ~ 0
 POWER_LED
 $Comp
-L Bourne_PTA6043:Bourne_Slider RV1
+L sorphitzarduino-rescue:Bourne_Slider-Bourne_PTA6043 RV1
 U 1 1 5BFA5669
 P 7750 4600
 F 0 "RV1" H 7750 4400 60  0000 C CNN
@@ -231,7 +231,7 @@ F 3 "" V 7700 4450 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Bourne_PTA6043:Bourne_Slider RV2
+L sorphitzarduino-rescue:Bourne_Slider-Bourne_PTA6043 RV2
 U 1 1 5BFA57ED
 P 8450 4600
 F 0 "RV2" H 8450 4400 60  0000 C CNN
@@ -242,7 +242,7 @@ F 3 "" V 8400 4450 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Bourne_PTA6043:Bourne_Slider RV3
+L sorphitzarduino-rescue:Bourne_Slider-Bourne_PTA6043 RV3
 U 1 1 5BFA5836
 P 9150 4600
 F 0 "RV3" H 9150 4400 60  0000 C CNN
@@ -253,7 +253,7 @@ F 3 "" V 9100 4450 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Bourne_PTA6043:Bourne_Slider RV4
+L sorphitzarduino-rescue:Bourne_Slider-Bourne_PTA6043 RV4
 U 1 1 5BFA58DD
 P 9850 4600
 F 0 "RV4" H 9850 4400 60  0000 C CNN
@@ -325,7 +325,7 @@ Wire Wire Line
 Wire Wire Line
 	4900 4450 4900 4950
 $Comp
-L Bourne_PTA6043:R R1
+L sorphitzarduino-rescue:R-Bourne_PTA6043 R1
 U 1 1 5BFA081C
 P 4500 4200
 F 0 "R1" V 4580 4200 50  0000 C CNN
@@ -336,7 +336,7 @@ F 3 "" H 4500 4200 50  0000 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L Bourne_PTA6043:R R2
+L sorphitzarduino-rescue:R-Bourne_PTA6043 R2
 U 1 1 5C037AD8
 P 4500 4350
 F 0 "R2" V 4580 4350 50  0000 C CNN
@@ -347,7 +347,7 @@ F 3 "" H 4500 4350 50  0000 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L Bourne_PTA6043:R R3
+L sorphitzarduino-rescue:R-Bourne_PTA6043 R3
 U 1 1 5C037B46
 P 4500 4500
 F 0 "R3" V 4580 4500 50  0000 C CNN
@@ -409,4 +409,48 @@ Wire Wire Line
 	4050 4350 4050 4450
 Wire Wire Line
 	4050 4350 4350 4350
+$Comp
+L Connector_Generic:Conn_01x01 J4
+U 1 1 5C079185
+P 3000 2000
+F 0 "J4" H 3079 2042 50  0000 L CNN
+F 1 "Mounting Hole" H 3079 1951 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 3000 2000 50  0001 C CNN
+F 3 "~" H 3000 2000 50  0001 C CNN
+	1    3000 2000
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector_Generic:Conn_01x01 J?
+U 1 1 5C07ACAF
+P 3000 2250
+F 0 "J?" H 3079 2292 50  0000 L CNN
+F 1 "Mounting Hole" H 3079 2201 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 3000 2250 50  0001 C CNN
+F 3 "~" H 3000 2250 50  0001 C CNN
+	1    3000 2250
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector_Generic:Conn_01x01 J?
+U 1 1 5C07AD05
+P 3000 2450
+F 0 "J?" H 3079 2492 50  0000 L CNN
+F 1 "Mounting Hole" H 3079 2401 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 3000 2450 50  0001 C CNN
+F 3 "~" H 3000 2450 50  0001 C CNN
+	1    3000 2450
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector_Generic:Conn_01x01 J?
+U 1 1 5C07AD41
+P 3000 2650
+F 0 "J?" H 3079 2692 50  0000 L CNN
+F 1 "Mounting Hole" H 3079 2601 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 3000 2650 50  0001 C CNN
+F 3 "~" H 3000 2650 50  0001 C CNN
+	1    3000 2650
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
