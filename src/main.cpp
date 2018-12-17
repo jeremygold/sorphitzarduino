@@ -40,8 +40,9 @@
 #include <tables/cos8192_int8.h>
 #include <mozzi_rand.h>
 #include <mozzi_midi.h>
+#include <AutoMap.h>
 
-#define FREQ_OFFSET_PIN 0
+#define MODULATION_PIN 0
 #define DIVERGENCE_PIN 1
 #define FREQ_PIN 2
 #define WAVEFORM_PIN 3
@@ -67,14 +68,16 @@ Oscil<COS8192_NUM_CELLS, AUDIO_RATE> aCos0b(COS8192_DATA);
 // base pitch frequencies
 float f0, f1, f2, f3, f4, f5, f6;
 
-// to map light input to frequency divergence of the b oscillators
-const float DIVERGENCE_SCALE = 0.01; // 0.01*1023 = 10.23 Hz max divergence
+const int MIN_FREQUENCY = 110;
+const int MAX_FREQUENCY = 880;
+AutoMap kFrequency(0, 1023, MIN_FREQUENCY, MAX_FREQUENCY);
 
-// to map freqOffset to base freq drift
-const float OFFSET_SCALE = 0.1; // 0.1*1023 = 102.3 Hz max drift
-const float FREQ_SCALE = 1.0;   // 1.0 * 1023 = 1023.0 Hz freq adjustment
-const float WAVE_SCALE = 1.0 / 1024.0;
+// desired intensity max and min, for AutoMap, note they're inverted for reverse dynamics
+const int MIN_VOLUME = 0;
+const int MAX_VOLUME = 256;
+AutoMap kMapVolume(0, 1023, MAX_VOLUME, MIN_VOLUME);
 
+float volume = 16.0;
 float waveRatio = 0.5;
 
 void setFrequencies(float baseFreq)
@@ -88,30 +91,13 @@ void setFrequencies(float baseFreq)
   f4 = f0 * 1.77777777778;
   f5 = f0 * 1.91666666667;
   f6 = f0 * 2.05555555556;
-
-  // set Oscils with chosen frequencies
-  aCos0.setFreq(f0);
-  aCos1.setFreq(f1);
-  aCos2.setFreq(f2);
-  aCos3.setFreq(f3);
-  aCos4.setFreq(f4);
-  aCos5.setFreq(f5);
-  aCos6.setFreq(f6);
-
-  // set frequencies of duplicate oscillators
-  aCos6b.setFreq(f6);
-  aCos0b.setFreq(f0);
-  aCos1b.setFreq(f1);
-  aCos2b.setFreq(f2);
-  aCos3b.setFreq(f3);
-  aCos4b.setFreq(f4);
-  aCos5b.setFreq(f5);
 }
 
 void setup()
 {
   startMozzi();
   setFrequencies(440.0);
+  Serial.begin(115200);
 }
 
 void loop()
@@ -122,65 +108,38 @@ void loop()
 void updateControl()
 {
   // read analog inputs
-  int freqOffset = mozziAnalogRead(FREQ_OFFSET_PIN); // not calibrated to degrees!
-  int divergenceSetting = mozziAnalogRead(DIVERGENCE_PIN);
+  volume = kMapVolume(mozziAnalogRead(MODULATION_PIN));
+  float divergence = kFrequency(mozziAnalogRead(DIVERGENCE_PIN));
+  float baseFreq = kFrequency(mozziAnalogRead(FREQ_PIN));
+  waveRatio = (float)mozziAnalogRead(WAVEFORM_PIN) / 1023.0;
 
-  float base_freq_offset = OFFSET_SCALE * freqOffset;
-  float divergence = DIVERGENCE_SCALE * divergenceSetting;
+  Serial.print(", vol:");
+  Serial.print(volume);
+  Serial.print(", bf:");
+  Serial.print(baseFreq);
+  Serial.print(", div:");
+  Serial.print(divergence);
+  Serial.print("wr:");
+  Serial.print(waveRatio);
+  Serial.println();
 
-  int baseFreq = mozziAnalogRead(FREQ_PIN) * FREQ_SCALE;
+  setFrequencies(baseFreq);
+  aCos0.setFreq(f0);
+  aCos1.setFreq(f1);
+  aCos2.setFreq(f2);
+  aCos3.setFreq(f3);
+  aCos4.setFreq(f4);
+  aCos5.setFreq(f5);
+  aCos6.setFreq(f6);
 
-  waveRatio = (float)mozziAnalogRead(WAVEFORM_PIN) * WAVE_SCALE;
-  setFrequencies(440.0 + baseFreq);
-
-  float freq;
-
-  // change frequencies of the oscillators, randomly choosing one pair each time to change
-  switch (rand(7))
-  {
-
-  case 0:
-    freq = f0 + base_freq_offset;
-    aCos0.setFreq(freq);
-    aCos0b.setFreq(freq + divergence);
-    break;
-
-  case 1:
-    freq = f1 + base_freq_offset;
-    aCos1.setFreq(freq);
-    aCos1b.setFreq(freq + divergence);
-    break;
-
-  case 2:
-    freq = f2 + base_freq_offset;
-    aCos2.setFreq(freq);
-    aCos2b.setFreq(freq + divergence);
-    break;
-
-  case 3:
-    freq = f3 + base_freq_offset;
-    aCos3.setFreq(freq);
-    aCos3b.setFreq(freq + divergence);
-    break;
-
-  case 4:
-    freq = f4 + base_freq_offset;
-    aCos4.setFreq(freq);
-    aCos4b.setFreq(freq + divergence);
-    break;
-
-  case 5:
-    freq = f5 + base_freq_offset;
-    aCos5.setFreq(freq);
-    aCos5b.setFreq(freq + divergence);
-    break;
-
-  case 6:
-    freq = f6 + base_freq_offset;
-    aCos6.setFreq(freq);
-    aCos6b.setFreq(freq + divergence);
-    break;
-  }
+  setFrequencies(divergence);
+  aCos0b.setFreq(f0);
+  aCos1b.setFreq(f1);
+  aCos2b.setFreq(f2);
+  aCos3b.setFreq(f3);
+  aCos4b.setFreq(f4);
+  aCos5b.setFreq(f5);
+  aCos6b.setFreq(f6);
 }
 
 int updateAudio()
@@ -196,5 +155,5 @@ int updateAudio()
       waveRatio * aCos5.next() + waveRatioInv * aCos5b.next() +
       waveRatio * aCos6.next() + waveRatioInv * aCos6b.next();
 
-  return asig >> 5;
+  return (int)(((long)(asig >> 4) * (long)volume) >> 8);
 }
