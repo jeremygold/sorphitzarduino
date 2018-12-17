@@ -36,6 +36,7 @@
 #include "mozzi_config.h"
 #include <MozziGuts.h>
 #include <Oscil.h>
+#include <tables/saw8192_int8.h>
 #include <tables/cos8192_int8.h>
 #include <mozzi_rand.h>
 #include <mozzi_midi.h>
@@ -43,16 +44,16 @@
 #define FREQ_OFFSET_PIN 0
 #define DIVERGENCE_PIN 1
 #define FREQ_PIN 2
-#define VOLUME_PIN 3
+#define WAVEFORM_PIN 3
 
 // harmonics
-Oscil<COS8192_NUM_CELLS, AUDIO_RATE> aCos1(COS8192_DATA);
-Oscil<COS8192_NUM_CELLS, AUDIO_RATE> aCos2(COS8192_DATA);
-Oscil<COS8192_NUM_CELLS, AUDIO_RATE> aCos3(COS8192_DATA);
-Oscil<COS8192_NUM_CELLS, AUDIO_RATE> aCos4(COS8192_DATA);
-Oscil<COS8192_NUM_CELLS, AUDIO_RATE> aCos5(COS8192_DATA);
-Oscil<COS8192_NUM_CELLS, AUDIO_RATE> aCos6(COS8192_DATA);
-Oscil<COS8192_NUM_CELLS, AUDIO_RATE> aCos0(COS8192_DATA);
+Oscil<SAW8192_NUM_CELLS, AUDIO_RATE> aCos1(SAW8192_DATA);
+Oscil<SAW8192_NUM_CELLS, AUDIO_RATE> aCos2(SAW8192_DATA);
+Oscil<SAW8192_NUM_CELLS, AUDIO_RATE> aCos3(SAW8192_DATA);
+Oscil<SAW8192_NUM_CELLS, AUDIO_RATE> aCos4(SAW8192_DATA);
+Oscil<SAW8192_NUM_CELLS, AUDIO_RATE> aCos5(SAW8192_DATA);
+Oscil<SAW8192_NUM_CELLS, AUDIO_RATE> aCos6(SAW8192_DATA);
+Oscil<SAW8192_NUM_CELLS, AUDIO_RATE> aCos0(SAW8192_DATA);
 
 // duplicates but slightly off frequency for adding to originals
 Oscil<COS8192_NUM_CELLS, AUDIO_RATE> aCos1b(COS8192_DATA);
@@ -71,7 +72,10 @@ const float DIVERGENCE_SCALE = 0.01; // 0.01*1023 = 10.23 Hz max divergence
 
 // to map freqOffset to base freq drift
 const float OFFSET_SCALE = 0.1; // 0.1*1023 = 102.3 Hz max drift
-const float FREQ_SCALE = 0.5;   // 0.5 * 1023 = 501.15 Hz freq adjustment
+const float FREQ_SCALE = 1.0;   // 1.0 * 1023 = 1023.0 Hz freq adjustment
+const float WAVE_SCALE = 1.0 / 1024.0;
+
+float waveRatio = 0.5;
 
 void setFrequencies(float baseFreq)
 {
@@ -125,6 +129,8 @@ void updateControl()
   float divergence = DIVERGENCE_SCALE * divergenceSetting;
 
   int baseFreq = mozziAnalogRead(FREQ_PIN) * FREQ_SCALE;
+
+  waveRatio = (float)mozziAnalogRead(WAVEFORM_PIN) * WAVE_SCALE;
   setFrequencies(440.0 + baseFreq);
 
   float freq;
@@ -179,15 +185,16 @@ void updateControl()
 
 int updateAudio()
 {
+  float waveRatioInv = 1.0 - waveRatio;
 
   int asig =
-      aCos0.next() + aCos0b.next() +
-      aCos1.next() + aCos1b.next() +
-      aCos2.next() + aCos2b.next() +
-      aCos3.next() + aCos3b.next() +
-      aCos4.next() + aCos4b.next() +
-      aCos5.next() + aCos5b.next() +
-      aCos6.next() + aCos6b.next();
+      waveRatio * aCos0.next() + waveRatioInv * aCos0b.next() +
+      waveRatio * aCos1.next() + waveRatioInv * aCos1b.next() +
+      waveRatio * aCos2.next() + waveRatioInv * aCos2b.next() +
+      waveRatio * aCos3.next() + waveRatioInv * aCos3b.next() +
+      waveRatio * aCos4.next() + waveRatioInv * aCos4b.next() +
+      waveRatio * aCos5.next() + waveRatioInv * aCos5b.next() +
+      waveRatio * aCos6.next() + waveRatioInv * aCos6b.next();
 
-  return asig >> 3;
+  return asig >> 5;
 }
