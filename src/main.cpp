@@ -46,6 +46,7 @@
 #define DIVERGENCE_PIN 1
 #define FREQ_PIN 2
 #define WAVEFORM_PIN 3
+#define LED_PIN 11
 
 // harmonics
 Oscil<SAW8192_NUM_CELLS, AUDIO_RATE> aCos1(SAW8192_DATA);
@@ -98,6 +99,7 @@ void setup()
   startMozzi();
   setFrequencies(440.0);
   Serial.begin(115200);
+  pinMode(LED_PIN, OUTPUT);
 }
 
 void loop()
@@ -154,6 +156,9 @@ int updateAudio()
       waveRatio * aCos4.next() + waveRatioInv * aCos4b.next() +
       waveRatio * aCos5.next() + waveRatioInv * aCos5b.next() +
       waveRatio * aCos6.next() + waveRatioInv * aCos6b.next();
+    
 
-  return (int)(((long)(asig >> 4) * (long)volume) >> 8);
+  int output = (int)(((long)(asig >> 4) * (long)volume) >> 9);
+  analogWrite(LED_PIN, output);
+  return output;
 }
